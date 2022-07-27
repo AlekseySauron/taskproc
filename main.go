@@ -1,25 +1,18 @@
 package main
 
-import "fmt"
-
-//"github.com/gin-gonic/gin"
+import (
+	"github.com/AlekseySauron/taskproc/pkg/actions"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
+	router := gin.Default()
 
-	fmt.Println("test")
+	router.GET("", actions.GettingWithoutParam)
+	router.GET("/:param", actions.GettingWithParam)
+	router.POST("/*param", actions.Posting)
+	router.PUT("/", actions.Putting)
+	router.DELETE("", actions.Deleting)
 
-	//gin.
-	// router := gin.Default()
-
-	// router.GET("/someGet", getting)
-	// router.POST("/somePost", posting)
-	// router.PUT("/somePut", putting)
-	// router.DELETE("/someDelete", deleting)
-	// router.PATCH("/somePatch", patching)
-	// router.HEAD("/someHead", head)
-	// router.OPTIONS("/someOptions", options)
-
-	// // By default it serves on :8080 unless a
-	// // PORT environment variable was defined.
-	// router.Run()
+	router.Run()
 }

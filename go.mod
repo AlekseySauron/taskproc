@@ -1,4 +1,4 @@
-module github.com/AlekseySauron/taskprocessing
+module github.com/AlekseySauron/taskproc
 
 go 1.18
 
