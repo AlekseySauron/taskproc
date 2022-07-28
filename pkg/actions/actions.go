@@ -37,40 +37,53 @@ func GettingWithoutParam(c *gin.Context) {
 func GettingWithParam(c *gin.Context) {
 	paramId := c.Param("param")
 
-	for _, curTask := range tasks {
-
-		if curTask.ID == paramId {
-			c.JSON(http.StatusOK, curTask)
-
-			return
-		}
-
+	taskExists, curTask := getTaskByID(paramId)
+	if taskExists {
+		c.JSON(http.StatusOK, curTask)
+	} else {
+		mes := mess{"error", "task not found"}
+		c.JSON(http.StatusNotFound, mes)
 	}
 
-	mes := mess{"error", "task not found"}
-	c.JSON(http.StatusNotFound, mes)
+	// for _, curTask := range tasks {
+	// 	if curTask.ID == paramId {
+	// 		c.JSON(http.StatusOK, curTask)
+	// 		return
+	// 	}
+	// }
+
 }
 
 func Posting(c *gin.Context) {
-	var newTask task
+	var newTasks []task
 
-	err := c.BindJSON(&newTask)
+	err := c.BindJSON(&newTasks)
 	if err != nil {
 		return
 	}
 
-	for _, curTask := range tasks {
-		if curTask.ID == newTask.ID {
+	for i := 0; i < len(newTasks); i++ {
+		newTask := newTasks[i]
 
-			mes := mess{"error", "task id already exists"}
-			c.JSON(http.StatusBadRequest, mes)
-
-			return
+		taskExists, _ := getTaskByID(newTask.ID)
+		if taskExists {
+			updateName(newTask.ID, newTask.Name)
+		} else {
+			addingTask(newTask.ID, newTask.Name)
 		}
 	}
 
-	tasks = append(tasks, newTask)
-	c.JSON(http.StatusCreated, newTask)
+	// for _, curTask := range tasks {
+	// 	if curTask.ID == newTask.ID {
+
+	// 		mes := mess{"error", "task id already exists"}
+	// 		c.JSON(http.StatusBadRequest, mes)
+
+	// 		return
+	// 	}
+	// }
+
+	c.JSON(http.StatusCreated, tasks)
 }
 
 func Putting(c *gin.Context) {
@@ -145,4 +158,35 @@ func deleteTask(ID string) {
 			return
 		}
 	}
+}
+
+func addingTask(ID string, Name string) {
+	var newTask task
+
+	newTask.ID = ID
+	newTask.Name = Name
+
+	tasks = append(tasks, newTask)
+}
+
+// func existTaskByID(ID string) bool {
+// 	for i := 0; i < len(tasks); i++ {
+// 		curTask := tasks[i]
+// 		if curTask.ID == ID {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
+func getTaskByID(ID string) (bool, task) {
+	var emptyTask task
+
+	for i := 0; i < len(tasks); i++ {
+		curTask := tasks[i]
+		if curTask.ID == ID {
+			return true, curTask
+		}
+	}
+	return false, emptyTask
 }
