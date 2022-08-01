@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/claygod/coffer"
 	"github.com/gin-gonic/gin"
 )
 
