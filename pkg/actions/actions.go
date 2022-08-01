@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/claygod/coffer"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,8 +31,14 @@ var tasks = []task{
 	{ID: "3", Name: "task3"},
 }
 
+func GetTasks() []task {
+	return tasks
+}
+
 func GettingWithoutParam(c *gin.Context) {
-	c.JSON(http.StatusOK, tasks)
+	records := db.RecordsList().Data
+	c.JSON(http.StatusOK, records)
+	// c.JSON(http.StatusOK, tasks)
 }
 
 func GettingWithParam(c *gin.Context) {
@@ -189,4 +196,8 @@ func getTaskByID(ID string) (bool, task) {
 		}
 	}
 	return false, emptyTask
+}
+
+func GetTaskByID(ID string) (bool, task) {
+	return getTaskByID(ID)
 }
