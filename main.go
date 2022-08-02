@@ -28,15 +28,16 @@ func main() {
 	// }
 
 	// return
+	actions.DbCoffer := db
 
 	router := gin.Default()
 
-	err = http_mod.Http_actions(router, db)
-	if err != nil {
-		return
-	}
+	// err = http_mod.Http_actions(router, db)
+	// if err != nil {
+	// 	return
+	// }
 
-	// router.GET("", actions.GettingWithoutParam)
+	router.GET("", actions.GettingWithoutParam)
 	// router.GET("/:param", actions.GettingWithParam)
 	// router.POST("/*param", actions.Posting)
 	// router.PUT("/", actions.Putting)

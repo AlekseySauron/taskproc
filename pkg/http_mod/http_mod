@@ -2,6 +2,9 @@ package http_mod
 
 func Http_actions(router *gin.Engine, db *coffer.Coffer) error {
 
+	// router.GET("", actions.GettingWithoutParam)
+	// router.Run()
+
 }
 
 // router.GET("", actions.GettingWithoutParam)

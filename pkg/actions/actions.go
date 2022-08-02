@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var DbCoffer *coffer.Coffer
+
 type task struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
@@ -35,7 +37,7 @@ func GetTasks() []task {
 }
 
 func GettingWithoutParam(c *gin.Context) {
-	records := db.RecordsList().Data
+	records := DbCoffer.RecordsList().Data
 	c.JSON(http.StatusOK, records)
 	// c.JSON(http.StatusOK, tasks)
 }
