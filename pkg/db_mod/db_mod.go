@@ -92,11 +92,17 @@ func (dbo *DbObject) Fill() error {
 	db := dbo.Db
 
 	var keys []string
-	countRec := dbo.Db.Count().Count
-	for i := 0; i < countRec; i++ {
-		keys = append(keys, fmt.Sprint(i))
+	// countRec := dbo.Db.Count().Count
+	// for i := 0; i < countRec; i++ {
+	// 	keys = append(keys, fmt.Sprint(i))
+	// }
+	records := dbo.Db.RecordsList().Data
+	for i := 0; i < len(records); i++ {
+		keys = append(keys, records[i])
 	}
+
 	dbo.Db.DeleteListOptional(keys)
+	fmt.Println("countTasksDB after del ", dbo.Count())
 
 	tasks := GetTasks()
 	for i := 0; i < len(tasks); i++ {
@@ -109,6 +115,7 @@ func (dbo *DbObject) Fill() error {
 		}
 
 	}
+	fmt.Println("countTasksDB after fill ", dbo.Count())
 	return nil
 
 }
