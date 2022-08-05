@@ -30,6 +30,9 @@ func New() *DbObject {
 	curDir, _ := os.Getwd()
 	//dbDir := filepath.Join(curDir, "data")
 	dbDir := curDir + "\\data\\"
+	// fmt.Println(dbDir)
+	// fmt.Println(filepath.Join(curDir, "data"))
+	// fmt.Println(filepath.Join(curDir, "data\\"))
 
 	var err, wrn error
 	res.Db, err, wrn = coffer.Db(dbDir).Create()
@@ -67,22 +70,16 @@ func (dbo *DbObject) Init() error {
 	switch {
 	case err != nil:
 		fmt.Println("Error:", err)
-		//return nil, err
 		return err
 	case wrn != nil:
 		fmt.Println("Warning:", err)
-		// return nil, err
 		return err
 	}
-	//if !db.Start() {
 	if !dbo.Db.Start() {
 		fmt.Println("Error: not start")
 		err = errors.New("error: not start")
-		// return nil, err
 		return err
 	}
-	//defer db.Stop()
-	// return db, nil
 	return nil
 
 }
@@ -92,17 +89,12 @@ func (dbo *DbObject) Fill() error {
 	db := dbo.Db
 
 	var keys []string
-	// countRec := dbo.Db.Count().Count
-	// for i := 0; i < countRec; i++ {
-	// 	keys = append(keys, fmt.Sprint(i))
-	// }
 	records := dbo.Db.RecordsList().Data
 	for i := 0; i < len(records); i++ {
 		keys = append(keys, records[i])
 	}
 
 	dbo.Db.DeleteListOptional(keys)
-	fmt.Println("countTasksDB after del ", dbo.Count())
 
 	tasks := GetTasks()
 	for i := 0; i < len(tasks); i++ {
@@ -115,7 +107,6 @@ func (dbo *DbObject) Fill() error {
 		}
 
 	}
-	fmt.Println("countTasksDB after fill ", dbo.Count())
 	return nil
 
 }

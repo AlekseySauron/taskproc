@@ -40,8 +40,6 @@ func Register(router *gin.Engine, db *coffer.Coffer) {
 
 func (h *Handler) GettingWithoutParam(c *gin.Context) {
 
-	fmt.Println("countTasksDB = ", h.db.Count().Count)
-
 	records := h.db.RecordsList().Data
 	c.JSON(http.StatusOK, h.listData(records))
 

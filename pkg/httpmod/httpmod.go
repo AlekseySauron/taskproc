@@ -1,8 +1,6 @@
 package httpmod
 
 import (
-	"fmt"
-
 	"github.com/AlekseySauron/taskproc/pkg/db_mod"
 	"github.com/AlekseySauron/taskproc/pkg/routes"
 	"github.com/gin-gonic/gin"
@@ -22,7 +20,6 @@ func New() *HttpObject {
 	if err != nil {
 		panic("Ошибка заполнения БД")
 	}
-	fmt.Println("countTasksDB = ", dbo.Count())
 
 	routes.Register(res.gin, dbo.Db)
 
