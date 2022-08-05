@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var DbCoffer *coffer.Coffer
+//var DbCoffer *coffer.Coffer
 
 type task struct {
 	ID   string `json:"id"`
@@ -27,9 +27,10 @@ type mess struct {
 // }
 
 var tasks = []task{
-	{ID: "1", Name: "task1"},
-	{ID: "2", Name: "task2"},
-	{ID: "3", Name: "task3"},
+	{ID: "10", Name: "task1"},
+	{ID: "20", Name: "task2"},
+	{ID: "30", Name: "task3"},
+	{ID: "40", Name: "task4"},
 }
 
 func GetTasks() []task {
@@ -37,8 +38,9 @@ func GetTasks() []task {
 }
 
 func GettingWithoutParam(c *gin.Context) {
-	records := DbCoffer.RecordsList().Data
-	c.JSON(http.StatusOK, records)
+	// records := DbCoffer.RecordsList().Data
+	// c.JSON(http.StatusOK, records)
+
 	// c.JSON(http.StatusOK, tasks)
 }
 

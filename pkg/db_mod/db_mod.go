@@ -4,46 +4,103 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 
-	"github.com/AlekseySauron/taskproc/pkg/actions"
 	"github.com/claygod/coffer"
 )
 
-func InitDb() (*coffer.Coffer, error) {
-	curDir, _ := os.Getwd()
-	// dbDir := path.Join(curDir, "data")
-	//dbDir := curDir + "\\data\\"
-	dbDir := filepath.Join(curDir, "data")
+type DbObject struct {
+	Db *coffer.Coffer
+}
 
-	db, err, wrn := coffer.Db(dbDir).Create()
+type task struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+var tasks = []task{
+	{ID: "10", Name: "task1"},
+	{ID: "20", Name: "task2"},
+	{ID: "30", Name: "task3"},
+	{ID: "40", Name: "task4"},
+}
+
+func New() *DbObject {
+	res := &DbObject{}
+
+	curDir, _ := os.Getwd()
+	//dbDir := filepath.Join(curDir, "data")
+	dbDir := curDir + "\\data\\"
+
+	var err, wrn error
+	res.Db, err, wrn = coffer.Db(dbDir).Create()
 
 	switch {
 	case err != nil:
 		fmt.Println("Error:", err)
-		return nil, err
+		panic(err)
 	case wrn != nil:
 		fmt.Println("Warning:", err)
-		return nil, err
+		panic(err)
 	}
-	if !db.Start() {
+
+	if !res.Db.Start() {
 		fmt.Println("Error: not start")
-		err = errors.New("error: not start")
-		return nil, err
+		panic("Ошибка старта БД")
 	}
-	//defer db.Stop()
-	return db, nil
+
+	return res
 }
 
-func FillDb(db *coffer.Coffer) error {
-	tasks := actions.GetTasks()
+func (dbo *DbObject) Count() int {
+	return dbo.Db.Count().Count
+}
+
+func (dbo *DbObject) Init() error {
+	curDir, _ := os.Getwd()
+	//dbDir := filepath.Join(curDir, "data")
+	dbDir := curDir + "\\data\\"
+
+	var temp *coffer.Coffer
+	temp, err, wrn := coffer.Db(dbDir).Create()
+	dbo.Db = temp
+
+	switch {
+	case err != nil:
+		fmt.Println("Error:", err)
+		//return nil, err
+		return err
+	case wrn != nil:
+		fmt.Println("Warning:", err)
+		// return nil, err
+		return err
+	}
+	//if !db.Start() {
+	if !dbo.Db.Start() {
+		fmt.Println("Error: not start")
+		err = errors.New("error: not start")
+		// return nil, err
+		return err
+	}
+	//defer db.Stop()
+	// return db, nil
+	return nil
+
+}
+
+func (dbo *DbObject) Fill() error {
+	//func Fill(dbo *DbObject) error {
+	db := dbo.Db
+
+	var keys []string
+	countRec := dbo.Db.Count().Count
+	for i := 0; i < countRec; i++ {
+		keys = append(keys, fmt.Sprint(i))
+	}
+	dbo.Db.DeleteListOptional(keys)
+
+	tasks := GetTasks()
 	for i := 0; i < len(tasks); i++ {
 		curTask := tasks[i]
-
-		// if rep := db.Write(curTask.ID, []byte(curTask.Name)); rep.IsCodeError() {
-		// 	fmt.Printf("Write error: code `%d` msg `%s`", rep.Code, rep.Error)
-		// 	return true
-		// }
 
 		rep := db.Write(curTask.ID, []byte(curTask.Name))
 		if rep.IsCodeError() {
@@ -53,4 +110,9 @@ func FillDb(db *coffer.Coffer) error {
 
 	}
 	return nil
+
+}
+
+func GetTasks() []task {
+	return tasks
 }
