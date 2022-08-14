@@ -1,13 +1,14 @@
 package httpmod
 
 import (
-	"github.com/AlekseySauron/taskproc/pkg/db_mod"
-	"github.com/AlekseySauron/taskproc/pkg/routes"
+	"github.com/AlekseySauron/taskproc/achive/db_mod"
+	"github.com/AlekseySauron/taskproc/achive/routes"
 	"github.com/gin-gonic/gin"
 )
 
 type HttpObject struct {
 	gin *gin.Engine
+	dbo db_mod.DbObject
 }
 
 func New() *HttpObject {

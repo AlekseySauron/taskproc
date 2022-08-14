@@ -1,0 +1,16 @@
+{
+    "sysname": "taskproc",    
+    "app": {
+        "db_type": "mongo/sql"
+    },
+    "db": {
+        "uri": "",
+        "name": "",
+        "collections": {
+            "orders": ""
+        }
+    },
+    "server": {
+        "address": ":8080"
+    }
+}

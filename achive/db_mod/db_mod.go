@@ -27,15 +27,12 @@ var tasks = []task{
 func New() *DbObject {
 	res := &DbObject{}
 
-	curDir, _ := os.Getwd()
-	//dbDir := filepath.Join(curDir, "data")
-	dbDir := curDir + "\\data\\"
-	// fmt.Println(dbDir)
-	// fmt.Println(filepath.Join(curDir, "data"))
-	// fmt.Println(filepath.Join(curDir, "data\\"))
+	//curDir, _ := os.Getwd()
+	//dbDir := curDir + "\\data\\"
 
 	var err, wrn error
-	res.Db, err, wrn = coffer.Db(dbDir).Create()
+	//res.Db, err, wrn = coffer.Db(dbDir).Create()
+	res.Db, err, wrn = coffer.Db("../data/").Create()
 
 	switch {
 	case err != nil:
